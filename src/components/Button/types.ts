@@ -1,3 +1,10 @@
 import { ButtonHTMLAttributes } from "react"
 
-export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {}
+export enum ButtonVariants {
+  Primary = "primary",
+  Secondary = "secondary",
+}
+
+export interface IButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+  variant?: ButtonVariants
+}
