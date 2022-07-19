@@ -1,5 +1,5 @@
-import React from "react"
 import { Button } from "../Button"
+import { Comment } from "../Comment"
 
 import styles from "./styles.module.css"
 
@@ -47,6 +47,12 @@ export function Post() {
           <Button type="submit">Publicar</Button>
         </footer>
       </form>
+
+      <div className={styles.commentList}>
+        <Comment />
+        <Comment />
+        <Comment />
+      </div>
     </article>
   )
 }
