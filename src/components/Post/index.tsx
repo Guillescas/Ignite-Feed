@@ -1,39 +1,67 @@
+import { format, formatDistanceToNow } from "date-fns"
+import ptBR from "date-fns/locale/pt-BR"
+
 import { Button } from "../Button"
 import { Comment } from "../Comment"
 import { Avatar } from "../index/Avatar"
 
+import { IPostProps } from "./types"
+
 import styles from "./styles.module.css"
 
-export function Post() {
+export function Post(props: IPostProps) {
+  const formattedPublishedDate = format(
+    props.publishedAt,
+    "d 'de' LLLL 'às' HH:mm'h'",
+    {
+      locale: ptBR,
+    }
+  )
+
+  const relativePublishedDateRelativeToNow = formatDistanceToNow(
+    props.publishedAt,
+    {
+      locale: ptBR,
+      addSuffix: true,
+    }
+  )
+
   return (
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <Avatar src="https://github.com/guillescas.png" />
+          <Avatar src={props.author.avatarUrl} />
 
           <div className={styles.authorInfo}>
-            <strong>Guilherme Illescas</strong>
-            <span>Front end developer</span>
+            <strong>{props.author.name}</strong>
+            <span>{props.author.role}</span>
           </div>
         </div>
 
-        <time title="11 de maio às 11:13" dateTime="2022-05-11 08:13:30">
-          Publicado há 1h
+        <time
+          title={formattedPublishedDate}
+          dateTime={props.publishedAt.toISOString()}
+        >
+          {relativePublishedDateRelativeToNow}
         </time>
       </header>
 
       <div className={styles.content}>
-        <p>
-          Fala galeraa 👋 Acabei de subir mais um projeto no meu portifa. É um
-        </p>
-        <p>
-          projeto que fiz no NLW Return, evento da Rocketseat. O nome do projeto
-          é
-        </p>
-        <p>
-          DoctorCare 🚀 👉 <a href="">jane.design/doctorcare</a>
-        </p>
-        <p>#novoprojeto #nlw #rocketseat</p>
+        {props.content.map((line) => {
+          switch (line.type) {
+            case "paragraph":
+              return <p>{line.content}</p>
+            case "link":
+              return (
+                <p>
+                  <a href="#">{line.content}</a>
+                </p>
+              )
+
+            default:
+              return
+          }
+        })}
       </div>
 
       <form className={styles.commentForm}>
